@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+	<PropertyGroup>
+		<TargetFramework>net461</TargetFramework>
+		<AssemblyName>AspNetCoreIntegrationTesting.WebApi</AssemblyName>
+		<RootNamespace>AspNetCoreIntegrationTesting.WebApi</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore" Version="2.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Cors" Version="2.0.2" />
+	</ItemGroup>
+</Project>

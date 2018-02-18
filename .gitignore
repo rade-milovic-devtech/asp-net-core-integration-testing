@@ -1,0 +1,12 @@
+# Visual Studio cache/options directory
+.vs/
+
+# JetBrains Rider cache/options directory
+.idea/
+
+# ASP.NET Core project configuration
+**/Properties/launchSettings.json
+
+# Build results
+bin/
+obj/

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net461</TargetFramework>
+		<Platform>x86</Platform>
+		<IsPackable>false</IsPackable>
+		<AssemblyName>AspNetCoreIntegrationTesting.Tests</AssemblyName>
+		<RootNamespace>AspNetCoreIntegrationTesting.Tests</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+		<PackageReference Include="xunit.core" Version="2.3.1" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+		<PackageReference Include="FluentAssertions" Version="4.19.4" />
+		<PackageReference Include="Moq" Version="4.8.1" />
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\src\WebApi.csproj" />
+	</ItemGroup>
+</Project>
