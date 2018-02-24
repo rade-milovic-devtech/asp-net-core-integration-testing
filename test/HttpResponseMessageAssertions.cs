@@ -13,7 +13,7 @@ namespace AspNetCoreIntegrationTesting.Tests
 		public void ContainJson(string expectedJson, string reason = "", params object[] reasonArgs)
 		{
 			var response = Subject as HttpResponseMessage;
-			var contentType = response.Content.Headers.ContentType.MediaType;
+			var contentType = response.Content.Headers?.ContentType?.MediaType;
 
 			Execute.Assertion
 				.ForCondition(response.IsSuccessStatusCode)
