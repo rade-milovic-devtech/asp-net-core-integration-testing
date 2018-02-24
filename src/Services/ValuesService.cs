@@ -8,5 +8,7 @@ namespace AspNetCoreIntegrationTesting.WebApi.Services
 			id >= 1 && id <= 10
 				? Maybe<string>.From($"value{id}")
 				: Maybe<string>.None;
+
+		public virtual void Add(string value) {}
 	}
 }

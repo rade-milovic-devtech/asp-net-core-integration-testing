@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
 using System.Net.Http;
-using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using AspNetCoreIntegrationTesting.WebApi;
 using Autofac;

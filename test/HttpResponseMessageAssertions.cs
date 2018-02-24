@@ -1,30 +1,41 @@
-using FluentAssertions;
 using FluentAssertions.Execution;
+using FluentAssertions.Formatting;
+using FluentAssertions.Json;
 using FluentAssertions.Primitives;
 using Newtonsoft.Json.Linq;
 using System.Net.Http;
 
 namespace AspNetCoreIntegrationTesting.Tests
 {
-	public class HttpResponseMessageAssertions : ObjectAssertions
+	public class HttpResponseMessageAssertions
+		: ReferenceTypeAssertions<HttpResponseMessage, HttpResponseMessageAssertions>
 	{
-		public HttpResponseMessageAssertions(object value) : base(value) {}
+		public HttpResponseMessageAssertions(HttpResponseMessage subject)
+		{
+			Subject = subject;
+		}
+
+		protected override string Identifier => nameof(HttpResponseMessage);
 
 		public void ContainJson(string expectedJson, string reason = "", params object[] reasonArgs)
 		{
-			var response = Subject as HttpResponseMessage;
-			var contentType = response.Content.Headers?.ContentType?.MediaType;
+			var contentType = Subject.Content.Headers?.ContentType?.MediaType;
+			var stringContent = Subject.Content.ReadAsStringAsync();
+			var jsonContent = JToken.Parse(stringContent.Result);
+			var expectedJsonContent = JToken.Parse(expectedJson);
+
+			var jsonFormatter = new JTokenFormatter();
+			var jsonFormattingContext = new FormattingContext { UseLineBreaks = false };
+			var message = "Expected response to have content of type application/json with value " +
+				jsonFormatter.Format(expectedJsonContent, jsonFormattingContext, null).Replace("{", "{{").Replace("}", "}}") +
+				$", but it had content of type {string.Join(", ", contentType)} and value " +
+				jsonFormatter.Format(jsonContent, jsonFormattingContext, null).Replace("{", "{{").Replace("}", "}}");
 
 			Execute.Assertion
-				.ForCondition(response.IsSuccessStatusCode)
 				.ForCondition(contentType == "application/json")
+				.ForCondition(JToken.DeepEquals(jsonContent, expectedJsonContent))
 				.BecauseOf(reason, reasonArgs)
-				.FailWith("Expected response to be successful and have content of type \"application/json\", " +
-					$"but it had status code of {response.StatusCode} and content types \"{string.Join(", ", contentType)}\"");
-
-			var stringContent = response.Content.ReadAsStringAsync();
-			var jsonContent = JToken.Parse(stringContent.Result);
-			jsonContent.Should().BeEquivalentTo(JToken.Parse(expectedJson));
+				.FailWith(message);
 		}
 	}
 

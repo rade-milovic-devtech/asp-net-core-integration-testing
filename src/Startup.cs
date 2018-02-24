@@ -21,6 +21,7 @@ namespace AspNetCoreIntegrationTesting.WebApi
 			services.AddMvcCore()
 				.AddFormatterMappings()
 				.AddJsonFormatters()
+				.AddDataAnnotations()
 				.AddCors();
 
 			containerBuilder.Populate(services);
