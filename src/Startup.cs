@@ -36,7 +36,8 @@ namespace AspNetCoreIntegrationTesting.WebApi
 				app.UseDeveloperExceptionPage();
 			}
 
-			app.UseMvc();
+			app.UseCorrelationId()
+				.UseMvc();
 		}
 	}
 }

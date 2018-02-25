@@ -3,7 +3,10 @@ using FluentAssertions.Formatting;
 using FluentAssertions.Json;
 using FluentAssertions.Primitives;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 using System.Net.Http;
+
+using static AspNetCoreIntegrationTesting.WebApi.CorrelationIdMiddleware;
 
 namespace AspNetCoreIntegrationTesting.Tests
 {
@@ -36,6 +39,32 @@ namespace AspNetCoreIntegrationTesting.Tests
 				.ForCondition(JToken.DeepEquals(jsonContent, expectedJsonContent))
 				.BecauseOf(reason, reasonArgs)
 				.FailWith(message);
+		}
+
+		public void HaveCorrelationId(string reason = "", params object[] reasonArgs)
+		{
+			Execute.Assertion
+				.ForCondition(Subject.Headers.Contains(CorrelationIdHeader))
+				.BecauseOf(reason, reasonArgs)
+				.FailWith($"Expected response to contain header {CorrelationIdHeader} but it did not");
+
+			Execute.Assertion
+				.ForCondition(Subject.Headers.GetValues(CorrelationIdHeader).Any())
+				.BecauseOf(reason, reasonArgs)
+				.FailWith($"Expected response header {CorrelationIdHeader} to have value but it did not");
+		}
+
+		public void HaveCorrelationIdWithValue(string expectedCorrelationIdValue, string reason = "", params object[] reasonArgs)
+		{
+			HaveCorrelationId(reason, reasonArgs);
+
+			var correlationIdValues = Subject.Headers.GetValues(CorrelationIdHeader);
+			Execute.Assertion
+				.ForCondition(correlationIdValues.SingleOrDefault() == expectedCorrelationIdValue)
+				.BecauseOf(reason, reasonArgs)
+				.FailWith($"Expected response to contain header {CorrelationIdHeader} " +
+					$"with single value of {expectedCorrelationIdValue}, " +
+					$"but it had the following values: {string.Join(", ", correlationIdValues)}");
 		}
 	}
 
